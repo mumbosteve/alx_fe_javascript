@@ -1,3 +1,5 @@
+// script.js
+
 // DOM elements
 const quoteDisplay = document.getElementById('quoteDisplay');
 const newQuoteBtn = document.getElementById('newQuote');
@@ -72,8 +74,8 @@ function updateSyncStatus(message, type = 'info') {
     syncStatus.style.display = 'block';
 }
 
-// Simulate fetching data from server
-async function fetchFromServer() {
+// Fetch quotes from server simulation
+async function fetchQuotesFromServer() {
     updateSyncStatus('Fetching data from server...', 'info');
     
     try {
@@ -124,7 +126,7 @@ async function postToServer(data) {
 
 // Sync data with server
 async function syncWithServer() {
-    const serverData = await fetchFromServer();
+    const serverData = await fetchQuotesFromServer();
     
     if (serverData.length > 0) {
         const conflicts = await mergeData(serverData);
