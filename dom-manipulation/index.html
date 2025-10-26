@@ -3,19 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Quote Generator</title>
+    <title>Dynamic Quote Generator with Filtering</title>
 </head>
 <body>
     <h1>Dynamic Quote Generator</h1>
-    <div id="quoteDisplay"></div>
-    <button id="newQuote">Show New Quote</button>
+    <p>Find inspiration in words of wisdom</p>
     
-    <!-- Add Export Quotes button -->
-    <button id="exportQuotes">Export Quotes</button>
-    
-    <!-- Add file input for import -->
-    <input type="file" id="importFile" accept=".json">
-    
+    <div class="container">
+        <div id="quoteDisplay">
+            <p>Click the button to generate a random quote!</p>
+        </div>
+        
+        <div class="controls">
+            <div class="category-filter">
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                </select>
+            </div>
+            <button id="newQuote">Show New Quote</button>
+        </div>
+        
+        <div class="quote-stats">
+            <span id="quoteCount">Total Quotes: 0</span>
+            <span id="categoryCount">Categories: 0</span>
+            <span id="filteredCount">Showing: All quotes</span>
+        </div>
+        
+        <div class="session-info">
+            <h3>Session Information</h3>
+            <p id="sessionInfo">Last viewed quote: None | Current filter: All Categories</p>
+        </div>
+        
+        <div class="add-quote-section">
+            <h2>Add Your Own Quote</h2>
+            <div class="form-group">
+                <label for="newQuoteText">Quote Text</label>
+                <textarea id="newQuoteText" placeholder="Enter a meaningful quote..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="newQuoteCategory">Category</label>
+                <input id="newQuoteCategory" type="text" placeholder="Enter quote category">
+            </div>
+            <button id="addQuoteBtn">Add Quote</button>
+        </div>
+        
+        <div class="storage-section">
+            <h2>Data Management</h2>
+            <div class="storage-buttons">
+                <button id="exportBtn">Export Quotes to JSON</button>
+                <button id="clearStorageBtn">Clear All Data</button>
+            </div>
+            <div class="file-input-group">
+                <label for="importFile">Import Quotes from JSON File:</label>
+                <input type="file" id="importFile" accept=".json" />
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
