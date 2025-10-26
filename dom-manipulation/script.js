@@ -100,6 +100,48 @@ async function fetchQuotesFromServer() {
     }
 }
 
+// Sync quotes between local storage and server
+async function syncQuotes() {
+    updateSyncStatus('Starting quote synchronization...', 'info');
+    
+    try {
+        // Step 1: Fetch latest quotes from server
+        const serverData = await fetchQuotesFromServer();
+        
+        if (serverData.length === 0) {
+            updateSyncStatus('No server data available', 'warning');
+            return;
+        }
+        
+        // Step 2: Merge server data with local data
+        const conflicts = await mergeData(serverData);
+        
+        // Step 3: Handle conflicts
+        if (conflicts.length > 0) {
+            pendingConflicts = conflicts;
+            resolveConflictsBtn.style.display = 'block';
+            updateSyncStatus(`${conflicts.length} conflicts detected during sync`, 'warning');
+            
+            // Show notification for manual conflicts
+            const manualConflicts = conflicts.filter(c => c.type === 'manual');
+            if (manualConflicts.length > 0) {
+                showConflictNotification(manualConflicts);
+            }
+        } else {
+            updateSyncStatus('Sync completed successfully - no conflicts', 'success');
+        }
+        
+        // Update sync timestamp
+        sessionData.lastSync = new Date().toISOString();
+        saveSessionData();
+        updateSessionInfo();
+        
+    } catch (error) {
+        updateSyncStatus('Sync failed: ' + error.message, 'error');
+        console.error('Sync error:', error);
+    }
+}
+
 // Simulate posting data to server
 async function postToServer(data) {
     updateSyncStatus('Sending data to server...', 'info');
@@ -124,26 +166,9 @@ async function postToServer(data) {
     }
 }
 
-// Sync data with server
+// Sync data with server (alias for syncQuotes)
 async function syncWithServer() {
-    const serverData = await fetchQuotesFromServer();
-    
-    if (serverData.length > 0) {
-        const conflicts = await mergeData(serverData);
-        
-        if (conflicts.length > 0) {
-            pendingConflicts = conflicts;
-            resolveConflictsBtn.style.display = 'block';
-            updateSyncStatus(`${conflicts.length} conflicts detected`, 'warning');
-            showConflictNotification(conflicts);
-        } else {
-            updateSyncStatus('Sync completed successfully', 'success');
-        }
-        
-        sessionData.lastSync = new Date().toISOString();
-        saveSessionData();
-        updateSessionInfo();
-    }
+    return await syncQuotes();
 }
 
 // Merge server data with local data
@@ -481,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function() {
     exportBtn.addEventListener('click', exportToJson);
     clearStorageBtn.addEventListener('click', clearAllData);
     importFile.addEventListener('change', importFromJsonFile);
-    syncNowBtn.addEventListener('click', syncWithServer);
+    syncNowBtn.addEventListener('click', syncQuotes);
     resolveConflictsBtn.addEventListener('click', () => showConflictNotification(pendingConflicts));
     closeConflictModal.addEventListener('click', () => conflictResolutionModal.style.display = 'none');
     
@@ -491,10 +516,10 @@ document.addEventListener('DOMContentLoaded', function() {
     showRandomQuote();
     
     // Start periodic syncing (every 30 seconds)
-    syncInterval = setInterval(syncWithServer, 30000);
+    syncInterval = setInterval(syncQuotes, 30000);
     
     // Initial sync
-    setTimeout(syncWithServer, 2000);
+    setTimeout(syncQuotes, 2000);
 });
 
 // Make resolveConflict function available globally
