@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Quote Generator with Filtering</title>
+    <title>Dynamic Quote Generator with Sync</title>
 </head>
 <body>
     <h1>Dynamic Quote Generator</h1>
     <p>Find inspiration in words of wisdom</p>
+    
+    <div id="syncStatus" style="padding: 10px; margin: 10px 0; border-radius: 5px;"></div>
     
     <div class="container">
         <div id="quoteDisplay">
@@ -52,11 +54,20 @@
             <div class="storage-buttons">
                 <button id="exportBtn">Export Quotes to JSON</button>
                 <button id="clearStorageBtn">Clear All Data</button>
+                <button id="syncNowBtn">Sync Now</button>
+                <button id="resolveConflictsBtn" style="display: none;">Resolve Conflicts</button>
             </div>
             <div class="file-input-group">
                 <label for="importFile">Import Quotes from JSON File:</label>
                 <input type="file" id="importFile" accept=".json" />
             </div>
+        </div>
+        
+        <div id="conflictResolutionModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid #ccc; border-radius: 10px; z-index: 1000;">
+            <h3>Conflict Resolution Required</h3>
+            <p id="conflictMessage"></p>
+            <div id="conflictOptions"></div>
+            <button id="closeConflictModal">Close</button>
         </div>
     </div>
 
