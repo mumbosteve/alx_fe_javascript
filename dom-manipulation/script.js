@@ -35,20 +35,43 @@ function showRandomQuote() {
     `;
 }
 
-// Create the add quote form dynamically
+// Create the add quote form dynamically using appendChild
 function createAddQuoteForm() {
     const formContainer = document.createElement('div');
-    formContainer.innerHTML = `
-        <h2>Add New Quote</h2>
-        <div>
-            <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-            <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-            <button onclick="addQuote()">Add Quote</button>
-        </div>
-    `;
     
-    // Insert the form after the quote display
-    quoteDisplay.parentNode.insertBefore(formContainer, quoteDisplay.nextSibling);
+    // Create heading
+    const heading = document.createElement('h2');
+    heading.textContent = 'Add New Quote';
+    formContainer.appendChild(heading);
+    
+    // Create input container
+    const inputContainer = document.createElement('div');
+    
+    // Create quote text input
+    const quoteTextInput = document.createElement('input');
+    quoteTextInput.type = 'text';
+    quoteTextInput.id = 'newQuoteText';
+    quoteTextInput.placeholder = 'Enter a new quote';
+    inputContainer.appendChild(quoteTextInput);
+    
+    // Create category input
+    const categoryInput = document.createElement('input');
+    categoryInput.type = 'text';
+    categoryInput.id = 'newQuoteCategory';
+    categoryInput.placeholder = 'Enter quote category';
+    inputContainer.appendChild(categoryInput);
+    
+    // Create add button
+    const addButton = document.createElement('button');
+    addButton.textContent = 'Add Quote';
+    addButton.onclick = addQuote;
+    inputContainer.appendChild(addButton);
+    
+    // Add input container to form container
+    formContainer.appendChild(inputContainer);
+    
+    // Insert the form after the quote display using appendChild
+    document.body.appendChild(formContainer);
 }
 
 // Add a new quote to the array and update display
