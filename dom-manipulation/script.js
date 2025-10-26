@@ -128,7 +128,7 @@ async function syncQuotes() {
                 showConflictNotification(manualConflicts);
             }
         } else {
-            updateSyncStatus('Sync completed successfully - no conflicts', 'success');
+            updateSyncStatus('Quotes synced with server!', 'success');
         }
         
         // Update sync timestamp
@@ -281,7 +281,7 @@ function resolveConflict(conflictIndex, resolution) {
     if (pendingConflicts.length === 0) {
         resolveConflictsBtn.style.display = 'none';
         conflictResolutionModal.style.display = 'none';
-        updateSyncStatus('All conflicts resolved', 'success');
+        updateSyncStatus('Quotes synced with server!', 'success');
     }
     
     saveQuotes();
